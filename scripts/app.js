@@ -33,7 +33,7 @@ const updateUI = (data) => {
     }
     else{
         timeSrc = `./img/nightTime${no}.mp4`;
-        console.log(timeSrc);
+        
         card.style.backgroundColor = '#181818';
         document.body.classList.add("bg-dark");
         formInput.classList.add("bg-dark");
