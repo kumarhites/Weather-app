@@ -4,10 +4,24 @@ const details = document.querySelector('.details');
 const time = document.querySelector('video.time');
 const icon = document.querySelector('.icon img');
 const formInput = document.querySelector('.formInput');
+const forecast = new Forecast();
+
+cityForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    // get the city value
+    const city = cityForm.city.value.trim();
+    cityForm.reset();
+    // get the data and update the ui 
+    forecast.updateCity(city)
+        .then(data => updateUI(data))
+        .catch(err => console.log(err));
+
+
+    //! adding city to local storage
+    localStorage.setItem('city', city);
+});
 
 const updateUI = (data) => {
-    // const cityDetails = data.cityDetails;
-    // const weather = data.weather;
 
     // destructure properties
     const {cityDetails, weather} = data;
@@ -51,32 +65,10 @@ const updateUI = (data) => {
 };
 
 
-const updateCity = async (city) => {
-    const cityDetails = await getCity(city);
-    const weather = await getWeather(cityDetails.Key);
-    //?object short hand notation can be used when the objectName and propertyName is same
-    return {cityDetails, weather}; 
-};
-
-cityForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    // get the city value
-    const city = cityForm.city.value.trim();
-    cityForm.reset();
-    // get the data and update the ui 
-    updateCity(city)
-        .then(data => updateUI(data))
-        .catch(err => console.log(err));
-
-
-    //! adding city to local storage
-    localStorage.setItem('city', city);
-});
-
 //! check if there is data in local storage
 
 if(localStorage.getItem('city')){
-    updateCity(localStorage.getItem('city'))
+    forecast.updateCity(localStorage.getItem('city'))
         .then(data => updateUI(data))
         .catch(err => console.log(err));
 }
